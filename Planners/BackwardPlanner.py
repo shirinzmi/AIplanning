@@ -27,8 +27,8 @@ class BackwardPlanner(Planner):
             return []
 
         # fill ...
-        frontier.put(...)
-        visited.add(...)
+        frontier.put(self.problem.goal_state)
+        visited.add(self.problem.goal_state)
 
         while not frontier.empty():
             current_state = frontier.get()
@@ -52,6 +52,9 @@ class BackwardPlanner(Planner):
 
     def predecessor(self, current_state) -> list[State]:
         result = []
-        # don't forget to set parent
-        ...
+        for action in self.problem.domain.actions:
+            if action.is_relevant(current_state):
+                new_state = action.regress(current_state)
+                new_state.parent = current_state
+                result.append(new_state)
         return result

@@ -49,6 +49,9 @@ class ForwardPlanner(Planner):
 
     def successor(self, current_state: State) -> list[State]:
         result = []
-        # don't forget to set parent
-        ...
+        for action in self.problem.domain.actions:
+            if action.is_applicable(current_state):
+                new_state = action.progress(current_state)
+                new_state.parent = current_state
+                result.append(new_state)
         return result

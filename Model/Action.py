@@ -37,7 +37,7 @@ class Action:
         Returns:
         - True if the action is relevant to the state, False otherwise.
         """
-        return ...
+        return self.add_list.intersection(state.literals) and not self.delete_list.intersection(state.literals)
 
     def regress(self, state: State) -> State:
         """
@@ -49,7 +49,8 @@ class Action:
         Returns:
         - The new state after regressing with the action effects.
         """
-        return ...
+        new_literals = (state.literals - self.add_list).union(self.positive_preconditions)
+        return State(self.action_name, list(new_literals))
 
     def progress(self, state: State) -> State:
         """
@@ -61,7 +62,8 @@ class Action:
         Returns:
         - The new state after progressing with the action effects.
         """
-        return ...
+        new_literals = (state.literals - self.delete_list).union(self.add_list)
+        return State(self.action_name, list(new_literals))
 
     def is_applicable(self, state: State) -> bool:
         """
@@ -73,7 +75,7 @@ class Action:
         Returns:
         - True if action is applicable False otherwise
         """
-        return ...
+        return self.positive_preconditions.issubset(state.literals) and not self.negative_preconditions.intersection(state.literals)
 
     def __str__(self) -> str:
         return (
